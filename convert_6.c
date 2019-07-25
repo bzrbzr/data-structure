@@ -14,8 +14,8 @@ char * convert(char * s, int numRows){
 	int cyctime = lenth/cyclenth;
 	if(lenth%cyclenth) cyctime += 1;
 
-	char *retsrc = (char *)malloc(sizeof(char)*lenth);
-	memset(retsrc,0,lenth);
+	char *retsrc = (char *)malloc(sizeof(char)*(lenth+1));
+	memset(retsrc,0,lenth+1);
 	for (i = 0; i < numRows; ++i)
 	{
 		for (j = 0; j + i < lenth; j += cyclenth)
