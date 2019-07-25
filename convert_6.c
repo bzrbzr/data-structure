@@ -3,31 +3,40 @@
 #include <stdlib.h>
 
 char * convert(char * s, int numRows){
-	int i,j;
-	i = numRows;
-	j = strlen(s)/(2*i-2);
-	if (strlen(s)%(2*i-2))
+	if (numRows == 1)
 	{
-		j = j+1;
+		return s;
 	}
-	char *retsrc = malloc(j);
-	int array[] = {};
-	for (i = 0; i < j; ++i)
+	int i,j,k;
+	k = 0;
+	int lenth = strlen(s);
+	int cyclenth = 2*numRows - 2;
+	int cyctime = lenth/cyclenth;
+	if(lenth%cyclenth) cyctime += 1;
+
+	char *retsrc = (char *)malloc(sizeof(char)*lenth);
+	memset(retsrc,0,lenth);
+	for (i = 0; i < numRows; ++i)
 	{
-		array[i] = 6*i;
+		for (j = 0; j + i < lenth; j += cyclenth)
+		{
+			 retsrc[k++] = s[i+j];
+			 if (i!=0&&i!=(numRows-1)&&(j+cyclenth-i<lenth))
+			 {
+			 	retsrc[k++] = s[cyclenth+j-i];
+			 }
+		}
 	}
-	for (i = 0; i < ; ++i)
-	{
-		/* code */
-	}
-	printf("i = %d j = %d\n",i,j);
+	return retsrc;
 }
 
 int main(int argc, char const *argv[])
 {
 	char *src = "LEETCODEISHIRING";
-	int num = 4;
-	convert(src,num);
-	printf("%s\n", src);
+	int lenth = strlen(src);
+	char *retunsrc = (char *)malloc(sizeof(char)*lenth);
+	int num = 3;
+	retunsrc = convert(src,num);
+	printf("%s\n", retunsrc);
 	return 0;
 }
