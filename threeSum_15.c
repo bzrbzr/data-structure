@@ -26,17 +26,20 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 	int i = 0;int j = 0;int k = 0;int target = 0;
 	int *numbs = sort(nums,numsSize);
 	int **triarray = (int **)malloc(sizeof(int *)*17000);
-	//returnColumnSizes = (int **)malloc(sizeof(int)*17000);
+	*returnColumnSizes = (int *)malloc(sizeof(int)*17000);
 	//memset(triarray , 0 ,17000);
 	int ptr_ra = -1;
 
 	for (i = 0; i < numsSize - 2; ++i)
 	{
+		while (i>0 && i<numsSize - 2 && numbs[i] == numbs[i-1])
+		{
+			i++;
+		}
 		j = i + 1;
 		k = numsSize - 1;
 		target = 0 - numbs[i];
 		//printf("%d %d %d\n",i,j,k);
-#if 1
 		while(j<k)
 		{
 			if (numbs[j] + numbs[k] == target)
@@ -45,36 +48,43 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 				triarray[ptr_ra][0] = numbs[i];
 				triarray[ptr_ra][1] = numbs[j];
 				triarray[ptr_ra][2] = numbs[k];
-				//(returnColumnSizes)[ptr_ra] = 3;
+				(*returnColumnSizes)[ptr_ra] = 3;
+				while(j<k && numbs[k] == numbs[k-1]) k--;
+				while(j<k && numbs[j] == numbs[j+1]) j++;
 				j++;
 				k--;
+				printf("k = %d  j = %d\n",k,j );
 			}
 			else if(numbs[j] + numbs[k] > target)
 			{
-				while(numbs[k] == numbs[k-1]) k--; 
+				while(j<k && numbs[k] == numbs[k-1]) k--; 
 				k--;
 			}
 			else
 			{
-				while(numbs[j] == numbs[j+1]) j++; 
+				while(j<k && numbs[j] == numbs[j+1]) j++; 
 				j++;
 			}
 		}
-#endif
+
 	}
 
-	for (i = 0; i < ptr_ra+1; ++i)
-	{
-		printf("%d %d %d\n", triarray[i][0],triarray[i][1],triarray[i][2]);
-	}
+	*returnSize = ptr_ra +1;
+
+	return triarray;
 }
 
 
 int main(int argc, char const *argv[])
 {
 	int count;int i = 0;
-	int** returnColumnSizes;
-	int nums[] = {-1, 0, 1, 2, -1, -4};
+	int** returnColumnSizes = (int **)malloc(sizeof(int*)*17000);
+	int nums[] = {0,0,0,0,0};
 	int **triplets = threeSum(nums,sizeof(nums)/sizeof(int),&count,returnColumnSizes);
+
+	for (i = 0; i < count; ++i)
+	{
+		printf("%d %d %d\n", triplets[i][0],triplets[i][1],triplets[i][2]);
+	}
 	return 0;
 }
