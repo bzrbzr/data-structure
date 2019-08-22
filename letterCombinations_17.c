@@ -2,64 +2,66 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-char abc[8][4] = {"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-int abcnum[] = {3,3,3,3,3,4,3,4};
 
-char **returnarray(char **beginarray,char *signalarray,int puts)
+char abc[8][5] = {"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+int abcnum[8] = {3,3,3,3,3,4,3,4};
+
+void returnarray(char * digits, int* returnSize,char ** returndigits,char *result,int i)
 {
-	int i = 0;int j = 1;
-	for (i = 0; i < abcnum[puts]; ++i)
+	
+	if (i == strlen(digits))
 	{
-		printf("%d %s\n", __LINE__,beginarray[i]);
-		returndigits[i][j] = abc[puts][0];
-		
+		returndigits[*returnSize] = malloc(sizeof(char )*(strlen(digits)+1));
+		memset(returndigits[*returnSize],0,strlen(digits)+1);
+		strcpy(returndigits[*returnSize],result);
+		returndigits[*returnSize][strlen(digits)] = '\0';
+		(*returnSize)++;
+		return; 
 	}
-	j++;
+	else
+	{
+		int j = 0;
+		if ((digits[i]-50)>=0&&(digits[i]-50<=7))
+		{
+			printf("-----%d\n",(digits[i]-50));
+			for (j = 0; j < abcnum[digits[i]-50]; ++j)
+			{
+				result[i] = abc[digits[i]-50][j];
+				returnarray(digits,returnSize,returndigits,result,i+1);
+			}
+		}
+	}
 }
 
 char ** letterCombinations(char * digits, int* returnSize){
 	int i = 0;int puts = 0;int count = 1;
-	//printf("%d\n", i);
+
+	if (strlen(digits) == 0 )
+	{
+		return NULL;
+	}
 	for (i = 0; i < strlen(digits); ++i)
 	{
 		puts = digits[i]-50;
-		//printf("puts = %d\n", puts);
 		count *= abcnum[puts];
 	}
-	* returnSize = count;
-	printf("returnSize = %d\n", *returnSize);
-	char ** returndigits = (char **)malloc(sizeof(char *)*count);
-	memset(returndigits,0,count);
-	for (i = 0; i <= count; ++i)
-	{
-		returndigits[i] = malloc(sizeof(char )*(strlen(digits)+1));
-		memset(returndigits[i],0,strlen(digits)+1);
-	}
+	*returnSize = 0;
 
-#if 1
-	for (i = 0; digits[i] ; ++i)
-	{
-		puts = digits[i]-50;
-		printf("%d\n",puts);
-		if (i == 0)
-		{
-			printf("---\n");
-			returndigits[0][0] = abc[puts][0];
-			returndigits[1][0] = abc[puts][1];
-			returndigits[2][0] = abc[puts][2];
-			returndigits[3][0] = abc[puts][3];
-		}
-		returndigits = returnarray(returndigits,abc[puts],puts);
-	}
-#endif
-	//printf("%c\n", returndigits[0][0]);
+	char ** returndigits = (char **)malloc(sizeof(char *)*(count+1));
+	memset(returndigits,0,count+1);
+
+	char *result = (char*)malloc((strlen(digits) + 1)*sizeof(char));
+	memset(result,0,(strlen(digits) + 1));
+	i = 0;
+	returnarray(digits,returnSize,returndigits,result,i);
+
 	return returndigits;
 }
 
 
 int main(int argc, char const *argv[])
 {
-	char *digits = "2";
+	char *digits = "";
 	int size = 0;int i = 0;
 	char ** returnchar = letterCombinations(digits,&size);
 	for (i = 0; i < size; ++i)
